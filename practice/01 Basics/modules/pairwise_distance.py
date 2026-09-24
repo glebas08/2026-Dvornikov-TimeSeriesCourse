@@ -47,9 +47,12 @@ class PairwiseDistance:
         dict_func: function reference
         """
 
-        dist_func = None
-
-        # INSERT YOUR CODE
+        if self.metric == 'euclidean':
+            dist_func = ED_distance
+        elif self.metric == 'dtw':
+            dist_func = DTW_distance
+        else:
+            raise ValueError(f"Unknown metric '{self.metric}'. Options: 'euclidean', 'dtw'")
 
         return dist_func
 
@@ -69,6 +72,16 @@ class PairwiseDistance:
         matrix_shape = (input_data.shape[0], input_data.shape[0])
         matrix_values = np.zeros(shape=matrix_shape)
         
-        # INSERT YOUR CODE
+        input_data = np.asarray(input_data, dtype=float)
+        K = input_data.shape[0]
+        matrix_values = np.zeros(shape=(K, K))
+
+        dist_func = self._choose_distance()
+
+        for i in range(K):
+            for j in range(i + 1, K):
+                dist = dist_func(input_data[i], input_data[j])
+                matrix_values[i, j] = dist
+                matrix_values[j, i] = dist
 
         return matrix_values

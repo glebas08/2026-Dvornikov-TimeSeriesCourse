@@ -14,10 +14,11 @@ def ED_distance(ts1: np.ndarray, ts2: np.ndarray) -> float:
     -------
     ed_dist: euclidean distance between ts1 and ts2
     """
-    
-    ed_dist = 0
 
-    # INSERT YOUR CODE
+    ts1 = np.asarray(ts1, dtype=float)
+    ts2 = np.asarray(ts2, dtype=float)
+
+    ed_dist = np.sqrt(np.sum((ts1 - ts2) ** 2))
 
     return ed_dist
 
@@ -58,8 +59,21 @@ def DTW_distance(ts1: np.ndarray, ts2: np.ndarray, r: float = 1) -> float:
     dtw_dist: DTW distance between ts1 and ts2
     """
 
-    dtw_dist = 0
+    ts1 = np.asarray(ts1, dtype=float)
+    ts2 = np.asarray(ts2, dtype=float)
+    n, m = len(ts1), len(ts2)
 
-    # INSERT YOUR CODE
+    # ширина окна Сакоэ-Чиба в отсчётах (r = 1 -> окно на всю матрицу)
+    w = max(int(np.ceil(r * max(n, m))), abs(n - m))
+
+    d = np.full((n + 1, m + 1), np.inf)
+    d[0, 0] = 0.0
+
+    for i in range(1, n + 1):
+        for j in range(max(1, i - w), min(m, i + w) + 1):
+            cost = (ts1[i - 1] - ts2[j - 1]) ** 2
+            d[i, j] = cost + min(d[i - 1, j], d[i, j - 1], d[i - 1, j - 1])
+
+    dtw_dist = d[n, m]
 
     return dtw_dist

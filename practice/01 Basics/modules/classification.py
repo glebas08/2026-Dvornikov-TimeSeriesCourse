@@ -1,4 +1,5 @@
 import numpy as np
+from typing_extensions import Self
 
 from modules.metrics import *
 from modules.utils import z_normalize
@@ -19,7 +20,7 @@ class TimeSeriesKNN:
              Options: {euclidean, dtw}
     metric_params: dictionary containing parameters for the distance metric being used
     """
-    
+
     def __init__(self, n_neighbors: int = 3, metric: str = 'euclidean', metric_params: dict | None = None) -> None:
 
         self.n_neighbors: int = n_neighbors
@@ -37,12 +38,12 @@ class TimeSeriesKNN:
         ----------
         X_train: train set with shape (ts_number, ts_length)
         Y_train: labels of the train set
-        
+
         Returns
         -------
         self: the fitted model
         """
-       
+
         self.X_train = X_train
         self.Y_train = Y_train
 
@@ -52,12 +53,12 @@ class TimeSeriesKNN:
     def _distance(self, x_train: np.ndarray, x_test: np.ndarray) -> float:
         """
         Compute distance between the train and test samples
-        
+
         Parameters
         ----------
         x_train: sample of the train set
         x_test: sample of the test set
-        
+
         Returns
         -------
         dist: distance between the train and test samples
@@ -77,7 +78,7 @@ class TimeSeriesKNN:
         Parameters
         ----------
         x_test: sample of the test set
-        
+
         Returns
         -------
         neighbors: k nearest neighbors (distance between neighbor and test sample, neighbor label) for test sample
