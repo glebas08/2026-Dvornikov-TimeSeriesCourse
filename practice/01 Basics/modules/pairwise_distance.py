@@ -48,8 +48,11 @@ class PairwiseDistance:
         """
 
         if self.metric == 'euclidean':
-            dist_func = ED_distance
+            # для нормализованных рядов нормализация "встроена" в саму формулу
+            dist_func = norm_ED_distance if self.is_normalize else ED_distance
         elif self.metric == 'dtw':
+            # для DTW нормализация выполняется заранее, в calculate(),
+            # поэтому здесь всегда используется обычная DTW_distance
             dist_func = DTW_distance
         else:
             raise ValueError(f"Unknown metric '{self.metric}'. Options: 'euclidean', 'dtw'")
@@ -71,10 +74,14 @@ class PairwiseDistance:
         
         matrix_shape = (input_data.shape[0], input_data.shape[0])
         matrix_values = np.zeros(shape=matrix_shape)
-        
+
         input_data = np.asarray(input_data, dtype=float)
         K = input_data.shape[0]
         matrix_values = np.zeros(shape=(K, K))
+
+        # для всех мер, кроме евклидовой, нормализация делается заранее через z_normalize
+        if self.is_normalize and self.metric != 'euclidean':
+            input_data = np.array([z_normalize(ts) for ts in input_data])
 
         dist_func = self._choose_distance()
 

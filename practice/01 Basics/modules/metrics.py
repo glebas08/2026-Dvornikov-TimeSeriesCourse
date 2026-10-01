@@ -37,9 +37,15 @@ def norm_ED_distance(ts1: np.ndarray, ts2: np.ndarray) -> float:
     norm_ed_dist: normalized Euclidean distance between ts1 and ts2s
     """
 
-    norm_ed_dist = 0
+    ts1 = np.asarray(ts1, dtype=float)
+    ts2 = np.asarray(ts2, dtype=float)
+    n = ts1.shape[0]
 
-    # INSERT YOUR CODE
+    mu1, mu2 = np.mean(ts1), np.mean(ts2)
+    sigma1, sigma2 = np.std(ts1), np.std(ts2)
+    dot_product = np.dot(ts1, ts2)
+
+    norm_ed_dist = np.sqrt(np.abs(2 * n * (1 - (dot_product - n * mu1 * mu2) / (n * sigma1 * sigma2))))
 
     return norm_ed_dist
 
