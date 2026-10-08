@@ -19,7 +19,6 @@ class PairwiseDistance:
 
         self.metric: str = metric
         self.is_normalize: bool = is_normalize
-    
 
     @property
     def distance_metric(self) -> str:
@@ -37,7 +36,6 @@ class PairwiseDistance:
             norm_str = "non-normalized "
 
         return norm_str + self.metric + " distance"
-
 
     def _choose_distance(self):
         """ Choose distance function for calculation of matrix
@@ -59,7 +57,6 @@ class PairwiseDistance:
 
         return dist_func
 
-
     def calculate(self, input_data: np.ndarray) -> np.ndarray:
         """ Calculate distance matrix
         
@@ -71,7 +68,7 @@ class PairwiseDistance:
         -------
         matrix_values: distance matrix
         """
-        
+
         matrix_shape = (input_data.shape[0], input_data.shape[0])
         matrix_values = np.zeros(shape=matrix_shape)
 

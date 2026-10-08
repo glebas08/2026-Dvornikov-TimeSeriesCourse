@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # for visualization
 import plotly
@@ -46,11 +47,11 @@ def plot_ts(ts_set: np.ndarray, plot_title: str = 'Input Time Series Set'):
 
     fig.update_layout(title={'text': plot_title, 'x': 0.5, 'y':0.9, 'xanchor': 'center', 'yanchor': 'top'},
                       title_font=dict(size=18, color='black'),
-                      plot_bgcolor="rgba(0,0,0,0)",
-                      paper_bgcolor='rgba(0,0,0,0)',
+                      plot_bgcolor= "white", #"rgba(0,0,0,0)",
+                      paper_bgcolor="white", #'rgba(0,0,0,0)',
                       legend=dict(font=dict(size=16, color='black')),
                       width=1000,
                       height=400
                       )
 
-    fig.show(renderer="colab")
+    fig.show()

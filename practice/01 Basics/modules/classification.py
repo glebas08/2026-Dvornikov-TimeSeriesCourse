@@ -63,10 +63,21 @@ class TimeSeriesKNN:
         -------
         dist: distance between the train and test samples
         """
+        normalize = self.metric_params.get('normalize', False)
 
-        dist = 0
-
-        # INSERT YOUR CODE
+        if self.metric == 'euclidean':
+            if normalize:
+                dist = norm_ED_distance(x_train, x_test)
+            else:
+                dist = ED_distance(x_train, x_test)
+        elif self.metric == 'dtw':
+            r = self.metric_params.get('r', 1)
+            if normalize:
+                dist = DTW_distance(z_normalize(x_train), z_normalize(x_test), r=r)
+            else:
+                dist = DTW_distance(x_train, x_test, r=r)
+        else:
+            raise ValueError(f"Unknown metric '{self.metric}'. Options: 'euclidean', 'dtw'")
 
         return dist
 
@@ -86,7 +97,12 @@ class TimeSeriesKNN:
 
         neighbors = []
 
-        # INSERT YOUR CODE
+        for x_train, y_train in zip(self.X_train, self.Y_train):
+            dist = self._distance(x_train, x_test)
+            neighbors.append((dist, y_train))
+
+        neighbors.sort(key=lambda pair: pair[0])
+        neighbors = neighbors[:self.n_neighbors]
 
         return neighbors
 
@@ -106,10 +122,13 @@ class TimeSeriesKNN:
 
         y_pred = []
 
-        # INSERT YOUR CODE
+        for x_test in X_test:
+            neighbors = self._find_neighbors(x_test)
+            neighbor_labels = [label for _, label in neighbors]
+            values, counts = np.unique(neighbor_labels, return_counts=True)
+            y_pred.append(values[np.argmax(counts)])
 
         return np.array(y_pred)
-
 
 def calculate_accuracy(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     """
